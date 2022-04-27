@@ -326,6 +326,24 @@ def msu_select_popup(root, msu_list, dpath, dfile, msus, sfc_list=None, eventid=
 
     root.mainloop()
 
+def no_file_found(root):
+    root.title('MSU Selector - File Not Found')
+    root.geometry("400x300")
+    background = PhotoImage(file="{}/resources/Missing_Files.png".format(os.getcwd()))
+
+    no_file_window = tkinter.Canvas(root, width=400, height=300)
+    no_file_window.pack(fill='both', expand=True)
+    no_file_window.create_image(0, 0, image=background, anchor="nw")
+
+    prompt_label = tkinter.Label(root, text="There's no gosh darn ALTTPR seed in your downloads, buddy")
+    prompt_label.config(font=('comic sans', 10))
+    no_file_window.create_window(200, 225, window=prompt_label)
+
+    ok = tkinter.Button(root, text='OK', command=lambda: root.destroy())
+    no_file_window.create_window(200, 260, window=ok)
+
+    root.mainloop()
+
 
 cursor = con.cursor()
 cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
@@ -357,6 +375,8 @@ else:
         file_count += 1
         if file_type == 'sfc' and file_name[0:file_name.index(' ')] == 'alttpr':
             sfc_files.append(down_file)
+        if file_count == len(list_) and len(sfc_files) == 0:
+            no_file_found(root)
         if file_count == len(list_):
             msus_path = retrieve_path(2)
             msus_list = os.listdir(msus_path)
@@ -373,5 +393,6 @@ else:
             if len(sfc_files) > 1:
                 msu_select_popup(root, available_msus, down_path, down_file, msus_path, sfc_files, 1)
             else:
-                down_file = sfc_files[0]
-                msu_select_popup(root, available_msus, down_path, down_file, msus_path)
+                if len(sfc_files) != 0:
+                    down_file = sfc_files[0]
+                    msu_select_popup(root, available_msus, down_path, down_file, msus_path)
