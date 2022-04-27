@@ -379,17 +379,10 @@ else:
             no_file_found(root)
         if file_count == len(list_):
             msus_path = retrieve_path(2)
-            msus_list = os.listdir(msus_path)
 
-            for msu_folder in msus_list:
-                msu_name, msu_file_type = os.path.splitext(msu_folder)
-                msu_file_type = msu_file_type[1:]
-                if msu_file_type == "":
-                    msu_file_type = "folder"
-                if msu_file_type == "folder":
-                    available_msus.append(msu_name)
-                elif msu_file_type == "msu":
-                    available_msus.append(msu_name)
+            for dir, sub, files in os.walk(msus_path):
+                available_msus = sub
+                break
             if len(sfc_files) > 1:
                 msu_select_popup(root, available_msus, down_path, down_file, msus_path, sfc_files, 1)
             else:
