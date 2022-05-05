@@ -373,7 +373,7 @@ else:
 
         file_type = file_type[1:]
         file_count += 1
-        if file_type == 'sfc' and file_name[0:file_name.index(' ')] == 'alttpr':
+        if file_type == 'sfc':
             sfc_files.append(down_file)
         if file_count == len(list_) and len(sfc_files) == 0:
             no_file_found(root)
@@ -383,9 +383,5 @@ else:
             for dir, sub, files in os.walk(msus_path):
                 available_msus = sub
                 break
-            if len(sfc_files) > 1:
+            if len(sfc_files) > 0:
                 msu_select_popup(root, available_msus, down_path, down_file, msus_path, sfc_files, 1)
-            else:
-                if len(sfc_files) != 0:
-                    down_file = sfc_files[0]
-                    msu_select_popup(root, available_msus, down_path, down_file, msus_path)
